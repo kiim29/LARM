@@ -13,7 +13,7 @@ class ScanInterpret(Node):
         self.cloudPublisher = self.create_publisher( PointCloud, 'cloud', 10)
 
     def scan_callback(self, scanMsg):
-        self.get_logger().info( f"scan:\n{scanMsg}" )
+        # self.get_logger().info( f"scan:\n{scanMsg}" )
         pc = PointCloud()
         obstacles= []
         angle= scanMsg.angle_min
