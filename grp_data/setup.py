@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'mon_premier_pkg'
+package_name = 'grp_data'
 
 setup(
     name=package_name,
