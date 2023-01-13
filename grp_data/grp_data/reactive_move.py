@@ -15,7 +15,7 @@ class ReactiveMove(Node):
 
     def avance(self):
         velo = Twist()
-        velo.linear.x = 0.2
+        velo.linear.x = 0.3
         self.velocity_publisher.publish(velo)
 
     def tourneGauche(self):
@@ -60,10 +60,12 @@ class ReactiveMove(Node):
                     self.consigne = 'gauche'
                 else:
                     self.consigne = 'droite'
-        elif obstacleDroite:
-            self.consigne = 'gauche'
-        elif obstacleGauche:
-            self.consigne = 'droite'
+        elif obstacleDroite: 
+            if self.consigne == 'avance':
+                self.consigne = 'gauche'
+        elif obstacleGauche: 
+            if self.consigne == 'avance':
+                self.consigne = 'droite'
         else:
             self.consigne = 'avance'
         self.activate()
