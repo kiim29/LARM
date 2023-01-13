@@ -66,6 +66,11 @@ class ReactiveMove(Node):
         elif obstacleGauche: 
             if self.consigne == 'avance':
                 self.consigne = 'droite'
+        elif self.consigne == ' avance' and random.random()<0.05:
+            self.consigne = 'droiteLongtemps'
+            compteur = random.randint(10,30)
+        elif self.consigne == 'droiteLongtemps' and compteur > 0:
+            compteur = compteur-1
         else:
             self.consigne = 'avance'
         self.activate()
