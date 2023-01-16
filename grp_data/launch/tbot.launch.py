@@ -22,6 +22,9 @@ def generate_launch_description():
         Node(
             package='grp_data',
             executable='reactive_move',
-            name='reactive_move'
+            name='reactive_move',
+            remappings=[
+                ('/commands/velocity', '/multi/cmd_nav')
+            ]
         )
     ])

@@ -24,7 +24,7 @@ def generate_launch_description():
             executable='reactive_move',
             name='reactive_move',
             remappings=[
-                ('/commands/velocity', '/cmd_vel')
+                ('/commands/velocity', '/multi/cmd_nav')
             ]    
         ),
         Node(
@@ -32,5 +32,10 @@ def generate_launch_description():
             executable='rviz2',
             name='visualization',
             arguments=['-d', [os.path.join('/home/bot/ros2_ws/LARM-kim-nathan/grp_data/for_rvizz/config_rviz2_for_sim.rviz')]]
+        ),
+        Node(
+            package='tbot_pytools',
+            executable='multiplexer',
+            name='multiplexer'
         )
     ])

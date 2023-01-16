@@ -13,5 +13,14 @@ def generate_launch_description():
             executable='rviz2',
             name='visualization',
             arguments=['-d', [os.path.join('/home/bot/ros2_ws/LARM-kim-nathan/grp_data/for_rvizz/config_rviz2_for_grp_data.rviz')]]
+        ),
+        Node(
+            package='teleop_twist_keyboard',
+            executable='teleop_twist_keyboard',
+            name='teleop',
+            prefix='gnome-terminal -x',
+            remappings=[
+                ('/cmd_vel', '/multi/cmd_teleop')
+            ]    
         )
     ])
