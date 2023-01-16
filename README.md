@@ -6,8 +6,7 @@ Ce package dépend de mb-tbot6. Il faut s'assurer qu'il est correctememt install
 Challenge 1 : le robot se déplace dans un espace clos en évitant les obstacles. La visualisation sur rviz2 montre la caméra et le laser.
 
 ### Auteurs :
-Kim Luxembourger (machine data)
-Nathan Simon
+Kim Luxembourger (machine data) et Nathan Simon
 
 ### Packages :
 pkg_data
