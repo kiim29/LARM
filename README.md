@@ -18,7 +18,7 @@ pkg_tbot
 En résumé : Créer un directory (`mkdir`) qui deviendra votre workspace et cloner notre package dedans (`clone`) :  
 `mkdir my_ws`  
 `cd my_ws`  
-Suivre le tuto https://ceri-num.gitbook.io/uv-larm/tuto.-01-kick-off/ros-basics pour installer le pkg-tbot (mb6-tbot) nécessaire
+Suivre le tuto https://ceri-num.gitbook.io/uv-larm/tuto.-01-kick-off/ros-basics pour installer le pkg-tbot (mb6-tbot) nécessaire.  
 `git clone https://github.com/kiim29/LARM-kim-nathan`  
 
 ### Puis dans votre workspace :
