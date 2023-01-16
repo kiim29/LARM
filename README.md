@@ -23,15 +23,17 @@ Puis cloner notre package dans votre workspace :
 `git clone https://github.com/kiim29/LARM-kim-nathan`  
 
 ### Puis dans votre workspace :
-`colcon build`  pour compiler les package
+`colcon build`  pour compiler les packages  
 `source install/setup.bash`
 
 ### Launch :
 Pour lancer la simulation :  
 `ros2 launch grp_data simulation.launch.py`  
 Elle démarre gazebo pour simuler le robot et rviz2 pour une visualisation partielle.  
+  
 Pour lancer le robot réel :  
 `ros2 launch grp_data tbot.launch.py`  
+  
 Pour lancer la visualisation :  
 `ros2 launch grp_data visualize.launch.py`  
 La visualisation fonctionne pour la simulation ou pour le robot réel. Elle permet un visuel sur les relevés laser et sur la caméra du robot. Elle ouvre aussi un nouveau terminal pour la commande teleop qui permet le contrôle à distance.  
