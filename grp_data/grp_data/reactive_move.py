@@ -16,7 +16,7 @@ class ReactiveMove(Node):
         self.velo = Twist()
 
     def avance(self):
-        if self.velo.linear.x <= 0.5:
+        if self.velo.linear.x <= 0.4:
             self.velo.linear.x += 0.01
 
     def tourneGauche(self):
@@ -72,7 +72,7 @@ class ReactiveMove(Node):
             if point.x > 0.05:
                 x=point.x/0.18
                 y=point.y/0.18
-                if -y*y*y*y > x - 2:
+                if -0.5*y*y*y*y > x - 2:
                     if y > 0:
                         obstacleProcheGauche = True
                     else:
