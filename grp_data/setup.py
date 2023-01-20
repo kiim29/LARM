@@ -26,7 +26,8 @@ setup(
             'scan_echo = grp_data.scan_echo:main',
             'reactive_move = grp_data.reactive_move:main',
             'cola_detect = grp_data.cola_detect:main',
-            'realsense = grp_data.realsense:process_img'
+            'realsense = grp_data.realsense:process_img',
+            'bottles_detect = grp_data.bottles_detect:main'
         ],
     },
 )
