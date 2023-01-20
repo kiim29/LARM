@@ -24,7 +24,9 @@ setup(
     entry_points={
         'console_scripts': [
             'scan_echo = grp_data.scan_echo:main',
-            'reactive_move = grp_data.reactive_move:main'
+            'reactive_move = grp_data.reactive_move:main',
+            'cola_detect = grp_data.cola_detect:main',
+            'realsense = grp_data.realsense:process_img'
         ],
     },
 )
