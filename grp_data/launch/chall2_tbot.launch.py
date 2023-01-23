@@ -9,11 +9,19 @@ def generate_launch_description():
 
     tbot_start_path = get_package_share_directory('tbot_start')
     launch_file_dir = os.path.join(tbot_start_path, 'launch')
+    slam_toolbox_path = get_package_share_directory('slam_toolbox')
+    launch2_file_dir = os.path.join(slam_toolbox_path, 'launch')
 
     return LaunchDescription([
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([launch_file_dir, '/full.launch.py'])
-            ),
+            PythonLaunchDescriptionSource([launch_file_dir, '/minimal.launch.py'])
+        ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([launch2_file_dir, '/online_sync_launch.py']),
+            launch_arguments={
+                'use_sim_time': 'False'
+            }.items()
+        ),
         Node(
             package='grp_data',
             executable='scan_echo',
@@ -26,6 +34,25 @@ def generate_launch_description():
             remappings=[
                 ('/commands/velocity', '/multi/cmd_nav')
             ]
+        ),
+        Node(
+            package='grp_data',
+            executable='realsense',
+            name='realsense'
+        ),
+        Node(
+            package='grp_data',
+            executable='cola_detect',
+            name='cola_detect'
+        ),
+        # Node(
+        #     package='grp_data',
+        #     executable='cherry_detect',
+        #     name='cherry_detect'
+        # ),
+        Node(
+            package='grp_data',
+            executable='bottles_detect',
+            name='bottles_detect'
         )
-        # ajout noeud de slam ?
     ])

@@ -12,7 +12,7 @@ class Vision(Node):
     def __init__(self):
         super().__init__('vision')
         self.create_subscription( Image, 'img', self.process_img, 10)
-        self.create_subscription( Image, 'depth', self.get_depth_map, 10)
+        # self.create_subscription( Image, 'depth', self.get_depth_map, 10)
         self.bridge = CvBridge()
         self.processedImgPublisher = self.create_publisher( Image, 'procsd_img', 10)
         self.maskImgPublisher = self.create_publisher( Image, 'mask_img', 10)
@@ -38,8 +38,8 @@ class Vision(Node):
         # Creating morphological kernel
         self.kernel = np.ones((3, 3), np.uint8)
     
-    def get_depth_map(self, msgImg):
-        self.depth_map = self.bridge.imgmsg_to_cv2(msgImg, 'bgr8')
+    # def get_depth_map(self, msgImg):
+    #     self.depth_map = self.bridge.imgmsg_to_cv2(msgImg, '8UC1')
 
     def process_img(self, msgImg) :
         frame=self.bridge.imgmsg_to_cv2(msgImg, 'bgr8')
@@ -69,8 +69,8 @@ class Vision(Node):
                 self.canPublish = True
                 self.point.x = x
                 self.point.y = y
-                # (self.point.z, null, null) = self.depth_map[int(y), int(x)]
-                print(self.depth_map[int(y), int(x)])
+                # z = self.depth_map[int(y), int(x)]
+                # self.point.z = float(z)
 
         msg_image = self.bridge.cv2_to_imgmsg( frame,"bgr8" )
         msg_image.header.stamp = self.get_clock().now().to_msg()

@@ -61,14 +61,15 @@ class Realsense(Node):
 
     def publish_imgs(self):
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(self.depth_image, alpha=0.03), cv2.COLORMAP_JET)
+        depth_colormap = cv2.convertScaleAbs(self.depth_image, alpha=0.03)
 
         msg_image = self.bridge.cv2_to_imgmsg( self.color_image,"bgr8" )
         msg_image.header.stamp = self.get_clock().now().to_msg()
         msg_image.header.frame_id = "camera_link"
         self.img_pub.publish(msg_image)
 
-        msg_depth = self.bridge.cv2_to_imgmsg(depth_colormap,"bgr8")
+        msg_depth = self.bridge.cv2_to_imgmsg(depth_colormap,"8UC1")
+        msg_depth = self.bridge.cv2_to_imgmsg(self.depth_image,)
         msg_depth.header.stamp = msg_image.header.stamp
         msg_depth.header.frame_id = "camera_link"
         self.depth_pub.publish(msg_depth)
