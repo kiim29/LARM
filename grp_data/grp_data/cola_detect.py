@@ -22,14 +22,12 @@ class Vision(Node):
         self.point = Point()
         self.canPublish = False
         
-        self.color=0
-
         self.lo=np.array([0, 150, 90])
         self.hi=np.array([5, 220, 250])
         self.lo2=np.array([170, 140, 130])
         self.hi2=np.array([180, 210, 200])
         self.lo3=np.array([0, 0, 0])
-        self.hi3=np.array([255, 255, 70])
+        self.hi3=np.array([255, 255, 45])
 
         self.color_info=(0, 0, 255)
 

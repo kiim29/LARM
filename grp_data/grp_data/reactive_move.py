@@ -82,10 +82,10 @@ class ReactiveMove(Node):
                         obstacleLoinGauche = True
                     else:
                         obstacleLoinDroite = True    
-        self.get_logger().info( f"\n\nobstacleLoinGauche:{obstacleLoinGauche}" )
-        self.get_logger().info( f"\nobstacleLoinDroite:{obstacleLoinDroite}" )
-        self.get_logger().info( f"\nobstacleProcheGauche:{obstacleProcheGauche}" )
-        self.get_logger().info( f"\nobstacleProcheDroite:{obstacleProcheDroite}" )
+        # self.get_logger().info( f"\n\nobstacleLoinGauche:{obstacleLoinGauche}" )
+        # self.get_logger().info( f"\nobstacleLoinDroite:{obstacleLoinDroite}" )
+        # self.get_logger().info( f"\nobstacleProcheGauche:{obstacleProcheGauche}" )
+        # self.get_logger().info( f"\nobstacleProcheDroite:{obstacleProcheDroite}" )
         if obstacleProcheGauche and obstacleProcheDroite:
             if self.consigne != 'gauche' and self.consigne != 'droite':
                 if random.random() < 0.5:
@@ -112,7 +112,7 @@ class ReactiveMove(Node):
                 self.consigne = 'courbeDroite'
         else:
             self.consigne = 'avance'
-        self.get_logger().info( f"\nConsigne:{self.consigne}" )
+        # self.get_logger().info( f"\nConsigne:{self.consigne}" )
         self.activate()
 
 

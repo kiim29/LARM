@@ -40,11 +40,11 @@ def generate_launch_description():
             executable='realsense',
             name='realsense'
         ),
-        Node(
-            package='grp_data',
-            executable='cola_detect',
-            name='cola_detect'
-        ),
+        # Node(
+        #     package='grp_data',
+        #     executable='cola_detect',
+        #     name='cola_detect'
+        # ),
         # Node(
         #     package='grp_data',
         #     executable='cherry_detect',
