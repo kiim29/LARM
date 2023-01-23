@@ -47,10 +47,8 @@ class ReactiveMove(Node):
             self.stop()
         elif self.consigne=='courbeGauche':
             self.tourneGauche()
-            self.avance()
         elif self.consigne=='courbeDroite':
             self.tourneDroite()
-            self.avance()
         elif self.consigne=='stop' :
             self.stop()
         else :
@@ -58,8 +56,8 @@ class ReactiveMove(Node):
         self.velocity_publisher.publish(self.velo)
 
     def stop(self):
-        if self.velo.linear.x >= 0.1:
-            self.velo.linear.x -= 0.1
+        if self.velo.linear.x >= 0.05:
+            self.velo.linear.x -= 0.05
         else:
             self.velo.linear.x = 0.0
         
@@ -99,7 +97,7 @@ class ReactiveMove(Node):
             if self.consigne != 'gauche':
                 self.consigne = 'droite'
         elif obstacleLoinDroite and obstacleLoinGauche: 
-            if self.consigne != 'courbeGauche' and self.consigne != 'courbeDroite':
+            if self.consigne == 'avance':
                 if random.random() < 0.5:
                     self.consigne = 'courbeGauche'
                 else:

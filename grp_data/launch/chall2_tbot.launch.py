@@ -14,7 +14,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([launch_file_dir, '/full.launch.py'])
+            PythonLaunchDescriptionSource([launch_file_dir, '/minimal.launch.py'])
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([launch2_file_dir, '/online_sync_launch.py']),

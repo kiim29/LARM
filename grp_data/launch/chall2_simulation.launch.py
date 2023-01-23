@@ -9,10 +9,18 @@ def generate_launch_description():
 
     tbot_sim_path = get_package_share_directory('tbot_sim')
     launch_file_dir = os.path.join(tbot_sim_path, 'launch')
+    slam_toolbox_path = get_package_share_directory('slam_toolbox')
+    launch2_file_dir = os.path.join(slam_toolbox_path, 'launch')
 
     return LaunchDescription([
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([launch_file_dir, '/challenge-1.launch.py'])
+        ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([launch2_file_dir, '/online_sync_launch.py']),
+            launch_arguments={
+                'use_sim_time': 'False'
+            }.items()
         ),
         Node(
             package='grp_data',
