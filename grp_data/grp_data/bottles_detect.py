@@ -19,7 +19,7 @@ class Detect(Node):
 
     def cola_callback(self, pointMsg) :
         strgMsg = String()
-        strgMsg.data = 'Bouteille de Nuka Cola en x = ' + str(pointMsg.x) + ' et y = ' + str(pointMsg.y) + 'détectée à ' + str(pointMsg.z) + 'm'
+        strgMsg.data = 'Bouteille de Nuka Cola en x = ' + str(round(pointMsg.x, 3)) + ' et y = ' + str(round(pointMsg.y, 3)) + ' détectée à ' + str(round(pointMsg.z, 3)) + 'm'
         self.bottleDetectPublisher.publish(strgMsg)
 
     # def cherry_callback(self, pointMsg) :

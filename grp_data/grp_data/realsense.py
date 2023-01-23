@@ -162,17 +162,19 @@ class Realsense(Node):
                 cv2.circle(frame, (int(x), int(y)), 5, self.color_info, 10)
                 cv2.line(frame, (int(x), int(y)), (int(x)+150, int(y)), self.color_info, 2)
                 cv2.putText(frame, "Objet !!!", (int(x)+10, int(y) -10), cv2.FONT_HERSHEY_DUPLEX, 1, self.color_info, 1, cv2.LINE_AA)
-                self.canPublish = True
+                
                 self.point.x = x
                 self.point.y = y
                 depth = self.depth_frame2.get_distance(int(x), int(y))
 
-                self.get_logger().info( f"\ndepth:{depth}" )
+                # self.get_logger().info( f"\ndepth:{depth}" )
                 dx ,dy, dz = rs.rs2_deproject_pixel_to_point(color_intrin, [x,y], depth)
                 distance = math.sqrt(((dx)**2) + ((dy)**2) + ((dz)**2))
-                self.get_logger().info( f"\ndistance:{distance}" )
-
-                # self.point.z = float(distance)
+                # self.get_logger().info( f"\ndistance:{distance}" )
+                
+                self.point.z = float(distance)
+                if 0.0 < distance <= 1.2:
+                    self.canPublish = True
 
 
         self.procsdImg = frame
