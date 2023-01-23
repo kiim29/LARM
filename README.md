@@ -2,7 +2,8 @@
 
 ### Descriptif :
 Dépot de notre projet en UV Logiciels et Applications pour la Robotique Mobile (LARM)
-Ce package dépend de mb-tbot6. Il faut s'assurer qu'il est correctememt installé sur la machine.
+Ce package dépend de mb-tbot6. Il faut s'assurer qu'il est correctememt installé sur la machine.  
+  
 Challenge 2 : le robot se déplace dans un espace clos en évitant les obstacles. Il fait une carte de son environnement par un SLAM. Il détecte des bouteilles de Nuka Cola quand il passe devant.
 
 ### Auteurs :
@@ -28,7 +29,7 @@ Puis cloner notre package dans votre workspace :
 ### Launch :
 Pour lancer la simulation :  
 `ros2 launch grp_data chall2_simulation.launch.py`  
-Elle démarre gazebo pour simuler le robot et rviz2 pour une visualisation partielle. On peut voir le robot eviter les obstacles dans Gazebo et faire une carte de l'arène virtuelle dans rviz2.  
+Elle démarre gazebo pour simuler le robot et rviz2 pour une visualisation partielle. On peut voir le robot éviter les obstacles dans Gazebo et faire une carte de l'arène virtuelle dans rviz2.  
   
 Pour lancer le robot réel :  
 `ros2 launch grp_data tbot.launch.py`  
@@ -41,7 +42,8 @@ La visualisation fonctionne pour le robot réel. Elle permet un visuel sur les r
 Pour repérer les bouteilles :  
 `ros2 topic echo detection`  
 Cette commande permet l'écoute du topic `/detection`. Elle signale lorsqu'une bouteille est repérée par le robot avec sa localisation et sa distance approximative.  
-
+  
+  
 
 ## LARM-challenge-1
 
