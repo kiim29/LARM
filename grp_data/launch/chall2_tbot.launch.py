@@ -24,6 +24,16 @@ def generate_launch_description():
         ),
         Node(
             package='grp_data',
+            executable='realsense',
+            name='realsense'
+        ),
+        Node(
+            package='grp_data',
+            executable='bottles_detect',
+            name='bottles_detect'
+        ),
+        Node(
+            package='grp_data',
             executable='scan_echo',
             name='scan'
         ),
@@ -34,25 +44,5 @@ def generate_launch_description():
             remappings=[
                 ('/commands/velocity', '/multi/cmd_nav')
             ]
-        ),
-        Node(
-            package='grp_data',
-            executable='realsense',
-            name='realsense'
-        ),
-        # Node(
-        #     package='grp_data',
-        #     executable='cola_detect',
-        #     name='cola_detect'
-        # ),
-        # Node(
-        #     package='grp_data',
-        #     executable='cherry_detect',
-        #     name='cherry_detect'
-        # ),
-        Node(
-            package='grp_data',
-            executable='bottles_detect',
-            name='bottles_detect'
         )
     ])

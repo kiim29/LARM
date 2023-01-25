@@ -6,7 +6,7 @@
 ###############################################
 
 import pyrealsense2 as rs
-import signal, time, numpy as np
+import signal, numpy as np
 import cv2, rclpy
 import math
 from rclpy.node import Node
@@ -38,19 +38,25 @@ class Realsense(Node):
         self.processedImgPublisher = self.create_publisher( Image, 'procsd_img', 10)
         self.maskImgPublisher = self.create_publisher( Image, 'mask_img', 10)
         self.colaDetectPublisher = self.create_publisher( Point, 'cola_detect', 10)
-        # self.timerPublishCola=self.create_timer(1, self.publishCola)
+        self.cherryDetectPublisher = self.create_publisher( Point, 'cherry_detect', 10)
         
-        self.point = Point()
-        self.canPublish = False
+        self.pointCola = Point()
+        self.pointCherry = Point()
+        self.canPublishCola = False
+        self.canPublishCherry = False
         
-        self.lo=np.array([0, 150, 90])
+        self.lo=np.array([0, 150, 90])#red1
         self.hi=np.array([5, 220, 250])
-        self.lo2=np.array([170, 140, 130])
+        self.lo2=np.array([170, 140, 130])#red2
         self.hi2=np.array([180, 210, 200])
-        self.lo3=np.array([0, 0, 0])
+        self.lo3=np.array([0, 0, 0])#black
         self.hi3=np.array([255, 255, 45])
-        self.lo4=np.array([0, 0, 190])
-        self.hi4=np.array([255, 255, 255])
+        self.lo4=np.array([0, 0, 170]) #white
+        self.hi4=np.array([255, 70, 255])
+        self.lo5=np.array([4, 150, 180]) #orange
+        self.hi5=np.array([12, 255, 255])
+        self.lo6=np.array([173, 120, 120]) #red for orange bottle
+        self.hi6=np.array([178, 180, 185])
         
 
         self.color_info=(0, 0, 255)
@@ -108,9 +114,13 @@ class Realsense(Node):
         msg_depth.header.frame_id = "camera_link"
         self.depth_pub.publish(msg_depth)
 
-        if self.canPublish :
-            self.colaDetectPublisher.publish(self.point)
-            self.canPublish = False
+        if self.canPublishCola :
+            self.colaDetectPublisher.publish(self.pointCola)
+            self.canPublishCola = False
+
+        if self.canPublishCherry :
+            self.cherryDetectPublisher.publish(self.pointCherry)
+            self.canPublishCherry = False
         
         msg_image = self.bridge.cv2_to_imgmsg(self.procsdImg,"bgr8" )
         msg_image.header.stamp = self.get_clock().now().to_msg()
@@ -122,15 +132,7 @@ class Realsense(Node):
         msg_image.header.frame_id = "image2fr"
         self.maskImgPublisher.publish(msg_image)
 
-    def show_imgs(self):
-
-        # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(self.depth_image, alpha=0.03), cv2.COLORMAP_JET)
-
-        # Show images
-        images = np.hstack(( self.color_image, depth_colormap )) # supose that depth_colormap_dim == color_colormap_dim (640x480) otherwize: resized_color_image = cv2.resize(color_image, dsize=(depth_colormap_dim[1], depth_colormap_dim[0]), interpolation=cv2.INTER_AREA)
-
-    def detect(self) :
+    def cola_detect(self) :
         frame=self.color_image
         image=cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         mask=cv2.inRange(image, self.lo, self.hi)
@@ -161,10 +163,10 @@ class Realsense(Node):
                 cv2.circle(image2, (int(x), int(y)), int(rayon), self.color_info, 2)
                 cv2.circle(frame, (int(x), int(y)), 5, self.color_info, 10)
                 cv2.line(frame, (int(x), int(y)), (int(x)+150, int(y)), self.color_info, 2)
-                cv2.putText(frame, "Objet !!!", (int(x)+10, int(y) -10), cv2.FONT_HERSHEY_DUPLEX, 1, self.color_info, 1, cv2.LINE_AA)
+                cv2.putText(frame, "Objet Nuka Cola!", (int(x)+10, int(y) -10), cv2.FONT_HERSHEY_DUPLEX, 1, self.color_info, 1, cv2.LINE_AA)
                 
-                self.point.x = x
-                self.point.y = y
+                self.pointCola.x = x
+                self.pointCola.y = y
                 depth = self.depth_frame2.get_distance(int(x), int(y))
 
                 # self.get_logger().info( f"\ndepth:{depth}" )
@@ -172,29 +174,54 @@ class Realsense(Node):
                 distance = math.sqrt(((dx)**2) + ((dy)**2) + ((dz)**2))
                 # self.get_logger().info( f"\ndistance:{distance}" )
                 
-                self.point.z = float(distance)
-                if 0.0 < distance <= 1.2:
-                    self.canPublish = True
+                self.pointCola.z = float(distance)
+                if 0.0 < distance <= 1.5:
+                    self.canPublishCola = True
 
+    def cherry_detect(self) :
+        frame=self.color_image
+        image=cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        whitemask=cv2.inRange(image,self.lo4,self.hi4)
+        orangemask=cv2.inRange(image,self.lo5,self.hi5)
+        redmaskfororange=cv2.inRange(image,self.lo6,self.hi6)
+        orangemask=cv2.erode(orangemask,self.kernel, iterations=2)
+        orangemask=cv2.dilate(orangemask,self.kernel, iterations=12)
+        whitemask=cv2.erode(whitemask,self.kernel, iterations=1)
+        whitemask=cv2.dilate(whitemask,self.kernel, iterations=10)
+        redmaskfororange=cv2.erode(redmaskfororange,self.kernel, iterations=0)
+        redmaskfororange=cv2.dilate(redmaskfororange,self.kernel, iterations=20)
+        mask=cv2.bitwise_and(orangemask, whitemask)
+        mask=cv2.bitwise_and(redmaskfororange, mask)
+        mask=cv2.dilate(mask,self.kernel, iterations=20)
+        mask=cv2.erode(mask,self.kernel, iterations=10)
+        image2=cv2.bitwise_and(frame, frame, mask= mask)
+        
+        # Get the intrinsic parameters
+        color_intrin = self.aligned_color_frame.profile.as_video_stream_profile().intrinsics
+
+        elements=cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+        if len(elements) > 0:
+            c=max(elements, key=cv2.contourArea)
+            ((x, y), rayon)=cv2.minEnclosingCircle(c)
+            if rayon>15 and y > 200:
+                cv2.circle(image2, (int(x), int(y)), int(rayon), self.color_info, 2)
+                cv2.circle(frame, (int(x), int(y)), 5, self.color_info, 10)
+                cv2.line(frame, (int(x), int(y)), (int(x)+150, int(y)), self.color_info, 2)
+                cv2.putText(frame, "Objet Nuka Cherry!", (int(x)+10, int(y) -10), cv2.FONT_HERSHEY_DUPLEX, 1, self.color_info, 1, cv2.LINE_AA)
+                
+                self.pointCherry.x = x
+                self.pointCherry.y = y
+                depth = self.depth_frame2.get_distance(int(x), int(y))
+
+                dx ,dy, dz = rs.rs2_deproject_pixel_to_point(color_intrin, [x,y], depth)
+                distance = math.sqrt(((dx)**2) + ((dy)**2) + ((dz)**2))
+                
+                self.pointCherry.z = float(distance)
+                if 0.0 < distance <= 1.5:
+                    self.canPublishCherry = True
 
         self.procsdImg = frame
         self.maskk = image2
-
-        # msg_image = self.bridge.cv2_to_imgmsg( frame,"bgr8" )
-        # msg_image.header.stamp = self.get_clock().now().to_msg()
-        # msg_image.header.frame_id = "image2fr"
-        # self.processedImgPublisher.publish(msg_image)
-
-        # msg_image = self.bridge.cv2_to_imgmsg( image2,"bgr8" )
-        # msg_image.header.stamp = self.get_clock().now().to_msg()
-        # msg_image.header.frame_id = "image2fr"
-        # self.maskImgPublisher.publish(msg_image)
-
-
-    # def publishCola(self) :
-    #     if self.canPublish :
-    #         self.colaDetectPublisher.publish(self.point)
-    #         self.canPublish = False
 
 # Catch Interuption signal:
 isOk= True
@@ -213,9 +240,9 @@ def process_img(args=None):
     rsNode.connect_imgs()
     while isOk:
         rsNode.read_imgs()
-        rsNode.detect()
+        rsNode.cola_detect()
+        rsNode.cherry_detect()
         rsNode.publish_imgs()
-        # rsNode.show_imgs()
         rclpy.spin_once(rsNode, timeout_sec=0.01)
     # Stop streaming
     print("Ending...")
