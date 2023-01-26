@@ -2,8 +2,9 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import PointCloud
-from geometry_msgs.msg import Point32
+from geometry_msgs.msg import Point
 import random
+import statistics
 
 class ReactiveMove(Node):
 
@@ -18,17 +19,33 @@ class ReactiveMove(Node):
         self.randtimer = self.create_timer(45.0, self.randomise) 
         self.velo = Twist()
 
+        self.phaseDetect = False
+
+        self.cola_detected = []
+        self.cherry_detected = []
+        self.create_subscription( Point, 'cola_detect', self.cola_react, 10)
+        self.create_subscription( Point, 'cherry_detect', self.cherry_react, 10)
+        self.cola_detectDefinitPublisher = self.create_publisher(Point, 'cola_detect_definite', 10)
+        self.cherry_detectDefinitPublisher = self.create_publisher(Point, 'cherry_detect_definite', 10)
+        self.cola_analyse_timer = self.create_timer(0.5, self.cola_analyse)
+
     def avance(self):
-        if self.velo.linear.x <= 0.35:
+        if self.velo.linear.x <= 0.3:
             self.velo.linear.x += 0.03
+        if self.phaseDetect:
+            self.velo.linear.x = 0.1
 
     def tourneGauche(self):
-        if self.velo.angular.z <= 1.0:
+        if self.velo.angular.z <= 0.7:
             self.velo.angular.z += 0.2
+        if self.phaseDetect:
+            self.velo.angular.z = 0.2
 
     def tourneDroite(self):
-        if self.velo.angular.z >= -1.0:
+        if self.velo.angular.z >= -0.7:
             self.velo.angular.z -= 0.2
+        if self.phaseDetect:
+            self.velo.angular.z = -0.2
     
     def droitDevant(self):
         if self.velo.angular.z >= 0.05:
@@ -37,16 +54,20 @@ class ReactiveMove(Node):
             self.velo.angular.z += 0.1
         elif self.velo.angular.z != 0.0:
             self.velo.angular.z = 0.0
+        if self.phaseDetect:
+            self.velo.angular.z = 0.0
 
     def activate(self):
-        if self.rand_target > 1.0:
-            self.consigne = 'gauche'
-            self.rand_target -= 1
-        elif self.rand_target < -1.0:
-            self.consigne = 'droite'
-            self.rand_target += 1
-        else:
-            self.rand_target = 0.0
+        if not self.phaseDetect :
+            if self.rand_target > 1.0:
+                self.consigne = 'gauche'
+                self.rand_target -= 1
+            elif self.rand_target < -1.0:
+                self.consigne = 'droite'
+                self.rand_target += 1
+            else:
+                self.rand_target = 0.0
+            
 
         if self.consigne=='avance' :
             self.avance()
@@ -80,6 +101,9 @@ class ReactiveMove(Node):
             self.velo.linear.x = 0.0
         
     def control(self, pointcloud):
+        self.consigne_timeout = 0
+        if self.phaseDetect:
+            return
         obstacleProcheGauche = False
         obstacleProcheDroite = False
         obstacleLoinGauche = False
@@ -124,7 +148,6 @@ class ReactiveMove(Node):
                 self.consigne = 'courbeDroite'
         else:
             self.consigne = 'avance'
-        self.consigne_timeout = 0
         # self.get_logger().info( f"\n\nobstacleLoinGauche:{obstacleLoinGauche}" )
         # self.get_logger().info( f"\nobstacleLoinDroite:{obstacleLoinDroite}" )
         # self.get_logger().info( f"\nobstacleProcheGauche:{obstacleProcheGauche}" )
@@ -133,6 +156,58 @@ class ReactiveMove(Node):
 
     def randomise(self):
         self.rand_target = random.randint(-20, 20)
+
+    def cola_react(self, ptMsg):
+        self.cola_detected.append(ptMsg)
+
+    def cola_analyse(self):
+        if len(self.cola_detected) >= 10 :
+            list_x = []
+            list_y = []
+            list_z = []
+            for p in self.cola_detected:
+                list_x.append(p.x)
+                list_y.append(p.y)
+                list_z.append(p.z)
+            etypeX = statistics.stdev(list_x)
+            etypeY = statistics.stdev(list_y)
+            mx = statistics.mean(list_x)
+            my = statistics.mean(list_y)
+            mz = statistics.mean(list_z)
+            if etypeX < 200 and etypeY < 200 :
+                if not self.phaseDetect :
+                    self.phaseDetect = True
+                    self.compteur_stop = 0
+                if mz > 0.6:
+                    if mx > 498:
+                        self.consigne = 'droite'
+                    elif mx < 350:
+                        self.consigne = 'gauche'
+                    else:
+                        self.consigne = 'avance'
+                else:
+                    self.consigne = 'stop'
+                    self.compteur_stop += 1
+                    p = Point()
+                    p.x = mx
+                    p.y = my
+                    p.z = mz
+                    self.cola_detectDefinitPublisher.publish( p )
+                if self.compteur_stop >= 10:
+                    self.consigne = 'droite'
+                    
+
+                self.get_logger().info( f"\npoint:{p}" )
+                self.get_logger().info( f"\nConsigne:{self.consigne}" )
+                self.rand_target = 0
+            else:
+                self.phaseDetect = False
+        else:
+            self.phaseDetect=False
+        self.cola_detected = []
+
+    def cherry_react(self, ptMsg):
+        x = ptMsg.x
 
 def main(args=None):
     rclpy.init(args=args)

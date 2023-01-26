@@ -8,8 +8,8 @@ class Detect(Node):
     def __init__(self):
         super().__init__('detect')
 
-        self.create_subscription( Point, 'cola_detect', self.cola_callback, 10)
-        self.create_subscription( Point, 'cherry_detect', self.cherry_callback, 10)
+        self.create_subscription( Point, 'cola_detect_definite', self.cola_callback, 10)
+        self.create_subscription( Point, 'cherry_detect_definite', self.cherry_callback, 10)
 
         self.bottleDetectPublisher = self.create_publisher( String, 'detection', 10)
 
