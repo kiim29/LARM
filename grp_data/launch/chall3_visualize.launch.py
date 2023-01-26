@@ -22,7 +22,7 @@ def generate_launch_description():
             remappings=[
                 ('/cmd_vel', '/multi/cmd_teleop')
             ]    
-        ),
+        )
         # Node(
         #     package='nav2_bringup',
         #     executable='navigation_launch',
