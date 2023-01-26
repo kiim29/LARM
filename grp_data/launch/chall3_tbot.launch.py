@@ -45,9 +45,9 @@ def generate_launch_description():
                 ('/commands/velocity', '/multi/cmd_nav')
             ]
         ),
-        Node(
-            package='grp_data',
-            executable='marker',
-            name='marker'
-        )
+        # Node(
+        #     package='grp_data',
+        #     executable='marker',
+        #     name='marker'
+        # )
     ])
