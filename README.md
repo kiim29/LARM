@@ -5,8 +5,7 @@ Dépot de notre projet en UV Logiciels et Applications pour la Robotique Mobile 
 Ce package dépend de mb-tbot6. Il faut s'assurer qu'il est correctememt installé sur la machine.  
   
 Challenge 3 : Le robot se déplace dans un espace clos en évitant les obstacles. Il fait une carte de son environnement par SLAM. Il détecte des bouteilles de Nuka Cola et de Nuka Cherry quand il passe devant. Il ralentit et se met face à une bouteille détectée pour un temps afin de s'assurer que c'est bien une bouteille.  
-En cours d'avancement : Une fois qu'il a détecté pour sûr une bouteille, il pose un marqueur sur la carte pour repérer son emplacement.  
-Reste à faire : Lorsqu'il passe devant une bouteille qu'il a détecté auparavant, il la reconnait d'après les positions enregistrées en mémoire.  
+Reste à faire : Une fois qu'il a détecté pour sûr une bouteille, il pose un marqueur sur la carte pour repérer son emplacement. Lorsqu'il passe devant une bouteille qu'il a détecté auparavant, il la reconnait d'après les positions enregistrées en mémoire.  
 
 ### Auteurs :
 Kim Luxembourger et Nathan Simon (machine data)
@@ -41,7 +40,8 @@ On peut voir le robot se déplacer et éviter les obstacles dans l'arène réell
 Pour lancer la visualisation :  
 `ros2 launch grp_data chall3_visualize.launch.py`  
 La visualisation fonctionne pour le robot réel. Elle permet un visuel sur les relevés laser et sur la caméra du robot. L'image signale les objets repérés par le robot (sans les derniers traitements pour éviter les faux positifs) en les indiquant avec une marque rouge. Elle ouvre aussi un nouveau terminal pour la commande teleop qui permet le contrôle à distance.  
-Elle affiche aussi la carte `/map` avec les obstacles et éventuellement les marqueurs de position des bouteilles.
+Elle affiche aussi la carte `/map` avec les obstacles et éventuellement les marqueurs de position des bouteilles.  
+Elle permet enfin de publier des `/goal_pose` pour envoyer le robot dans une position précise.
   
 Pour repérer les bouteilles :  
 `ros2 topic echo detection`  
