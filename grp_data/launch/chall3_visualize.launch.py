@@ -23,9 +23,9 @@ def generate_launch_description():
                 ('/cmd_vel', '/multi/cmd_teleop')
             ]    
         ),
-        Node(
-            package='nav2_bringup',
-            executable='navigation_launch',
-            name='navigation_launch'
-        )
+        # Node(
+        #     package='nav2_bringup',
+        #     executable='navigation_launch',
+        #     name='navigation_launch'
+        # )
     ])
