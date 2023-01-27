@@ -35,12 +35,12 @@ Elle démarre gazebo pour simuler le robot et rviz2 pour une visualisation parti
   
 Pour lancer le robot réel :  
 `ros2 launch grp_data chall3_tbot.launch.py`  
-On peut voir le robot se déplacer et éviter les obstacles dans l'arène réelle. Ce launch démarre le robot, le laser scan, la caméra, la détection de bouteilles, etc... Pour la détection des bouteilles, nous avons choisi de fonctionner avec trois seuils de couleurs pour chaque bouteille (noir, rouge et blanc pour le Nuka Cola) correspondant aux couleurs de la bouteille, de l'étiquette et du nom sur l'étiquette. Cela nous donne 3 masques que l'on peut dilater et faire se recouper pour repérer une étiquette, et donc une bouteille.  
+On peut voir le robot se déplacer et éviter les obstacles dans l'arène réelle. Ce launch démarre le robot, le laser scan, la caméra, la détection de bouteilles, etc... Pour la détection des bouteilles, nous avons choisi de fonctionner avec trois seuils de couleurs pour chaque bouteille (noir, rouge et blanc pour le Nuka Cola; orange, rouge et blanc pour le Nuka Cherry) correspondant aux couleurs de la bouteille, de l'étiquette et du nom sur l'étiquette. Cela nous donne 3 masques que l'on peut dilater et faire se recouper pour trouver une étiquette, et donc une bouteille.  
   
 Pour lancer la visualisation :  
 `ros2 launch grp_data chall3_visualize.launch.py`  
 La visualisation fonctionne pour le robot réel. Elle permet un visuel sur les relevés laser et sur la caméra du robot. L'image signale les objets repérés par le robot (sans les derniers traitements pour éviter les faux positifs) en les indiquant avec une marque rouge. Elle ouvre aussi un nouveau terminal pour la commande teleop qui permet le contrôle à distance.  
-Elle affiche également la carte `/map` avec les obstacles et éventuellement les marqueurs de position des bouteilles.  
+Elle affiche aussi la carte `/map` avec les obstacles et éventuellement les marqueurs de position des bouteilles.  
   
 Pour repérer les bouteilles :  
 `ros2 topic echo detection`  
