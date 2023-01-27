@@ -4,8 +4,8 @@
 Dépot de notre projet en UV Logiciels et Applications pour la Robotique Mobile (LARM)
 Ce package dépend de mb-tbot6. Il faut s'assurer qu'il est correctememt installé sur la machine.  
   
-Challenge 3 : Le robot se déplace dans un espace clos en évitant les obstacles. Il fait une carte de son environnement par SLAM. Il détecte des bouteilles de Nuka Cola et de Nuka Cherry quand il passe devant. Il ralentit et se met face à une bouteille détectée pour un temps afin de s'assurer que c'est bien une bouteille.  
-Reste à faire : Une fois qu'il a détecté pour sûr une bouteille, le robot pose un marqueur sur la carte pour repérer son emplacement. Lorsqu'il passe devant une bouteille qu'il a détecté auparavant, il la reconnait d'après les positions enregistrées en mémoire. La visualisation sur Rviz2 devrait aussi permettre de publier des `/goal_pose` pour envoyer le robot dans une position précise.  
+Challenge 3 : Le robot se déplace dans un espace clos en évitant les obstacles. Il fait une carte de son environnement par SLAM. Il détecte des bouteilles de Nuka Cola et de Nuka Cherry quand il passe devant. Il ralentit et se met face à une bouteille détectée pour un temps afin de s'assurer que c'est bien une bouteille. Il met un message dans le topic `/detection` en précisant le type de la bouteille (Nuka Cola ou Nuka Cherry) et sa position estimée. Une fois qu'il a détecté pour sûr une bouteille, le robot pose un marqueur sur la carte pour repérer son emplacement.  
+Reste à faire : Lorsqu'il passe devant une bouteille qu'il a détecté auparavant, il la reconnait d'après les positions enregistrées en mémoire. La visualisation sur Rviz2 devrait aussi permettre de publier des `/goal_pose` pour envoyer le robot dans une position précise.  
 
 ### Auteurs :
 Kim Luxembourger et Nathan Simon (machine data)
@@ -35,12 +35,12 @@ Elle démarre gazebo pour simuler le robot et rviz2 pour une visualisation parti
   
 Pour lancer le robot réel :  
 `ros2 launch grp_data chall3_tbot.launch.py`  
-On peut voir le robot se déplacer et éviter les obstacles dans l'arène réelle. Ce launch démarre le robot, le laser scan, la caméra, la détection de bouteilles, etc... 
+On peut voir le robot se déplacer et éviter les obstacles dans l'arène réelle. Ce launch démarre le robot, le laser scan, la caméra, la détection de bouteilles, etc... Pour la détection des bouteilles, nous avons choisi de fonctionner avec trois seuils de couleurs pour chaque bouteille (noir, rouge et blanc pour le Nuka Cola) correspondant aux couleurs de la bouteille, de l'étiquette et du nom sur l'étiquette. Cela nous donne 3 masques que l'on peut dilater et faire se recouper pour repérer une étiquette, et donc une bouteille.  
   
 Pour lancer la visualisation :  
 `ros2 launch grp_data chall3_visualize.launch.py`  
 La visualisation fonctionne pour le robot réel. Elle permet un visuel sur les relevés laser et sur la caméra du robot. L'image signale les objets repérés par le robot (sans les derniers traitements pour éviter les faux positifs) en les indiquant avec une marque rouge. Elle ouvre aussi un nouveau terminal pour la commande teleop qui permet le contrôle à distance.  
-Elle affiche aussi la carte `/map` avec les obstacles et éventuellement les marqueurs de position des bouteilles.  
+Elle affiche également la carte `/map` avec les obstacles et éventuellement les marqueurs de position des bouteilles.  
   
 Pour repérer les bouteilles :  
 `ros2 topic echo detection`  
