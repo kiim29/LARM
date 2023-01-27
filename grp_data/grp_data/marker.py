@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Point
-from marker import Marker
+from visualization_msgs.msg import Marker
 
 class MarkerNode(Node):
 
@@ -16,6 +16,9 @@ class MarkerNode(Node):
     def callback(self, localPoint) :
         globalPoint = Marker()
         globalPoint.pose.position = localPoint
+	globalPoint.scale.x = 1.0
+	globalPoint.scale.y = 1.0
+	globalPoint.scale.z = 1.0
         globalPoint.header.stamp = self.get_clock().now().to_msg()
         globalPoint.header.frame_id = "base_link"
         self.markerPublisher.publish(globalPoint)

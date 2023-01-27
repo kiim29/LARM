@@ -23,11 +23,11 @@ def generate_launch_description():
                 ('/cmd_vel', '/multi/cmd_teleop')
             ]    
         ),
-        Node(
-            package='grp_data',
-            executable='marker',
-            name='marker'
-        )
+        # Node(
+        #     package='grp_data',
+        #     executable='marker',
+        #     name='marker'
+        # )
         # Node(
         #     package='nav2_bringup',
         #     executable='navigation_launch',

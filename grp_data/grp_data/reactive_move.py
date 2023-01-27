@@ -32,19 +32,19 @@ class ReactiveMove(Node):
         self.cherry_analyse_timer = self.create_timer(0.5, self.cherry_analyse)
 
     def avance(self):
-        if self.velo.linear.x <= 0.3:
+        if self.velo.linear.x <= 0.4:
             self.velo.linear.x += 0.03
         if self.phaseDetectCola or self.phaseDetectCherry:
             self.velo.linear.x = 0.1
 
     def tourneGauche(self):
-        if self.velo.angular.z <= 0.7:
+        if self.velo.angular.z <= 0.8:
             self.velo.angular.z += 0.2
         if self.phaseDetectCola or self.phaseDetectCherry:
             self.velo.angular.z = 0.2
 
     def tourneDroite(self):
-        if self.velo.angular.z >= -0.7:
+        if self.velo.angular.z >= -0.8:
             self.velo.angular.z -= 0.2
         if self.phaseDetectCola or self.phaseDetectCherry:
             self.velo.angular.z = -0.2
