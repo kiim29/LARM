@@ -22,6 +22,11 @@ def generate_launch_description():
             remappings=[
                 ('/cmd_vel', '/multi/cmd_teleop')
             ]    
+        ),
+        Node(
+            package='grp_data',
+            executable='marker',
+            name='marker'
         )
         # Node(
         #     package='nav2_bringup',

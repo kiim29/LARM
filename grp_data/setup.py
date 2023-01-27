@@ -27,7 +27,7 @@ setup(
             'reactive_move = grp_data.reactive_move:main',
             'realsense = grp_data.realsense:process_img',
             'bottles_detect = grp_data.bottles_detect:main',
-            'navigation_launch = grp_data.navigation_launch:main'
+            'marker = grp_data.marker:main'
         ],
     },
 )
