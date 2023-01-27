@@ -26,7 +26,7 @@ Puis cloner notre package dans votre workspace :
 
 ### Puis dans votre workspace, à chaque modification de code :
 `colcon build`  pour compiler les packages  
-`source install/setup.bash` pour sourcer 
+`source install/setup.bash` pour sourcer
 
 ### Launch :
 Pour lancer la simulation :  
